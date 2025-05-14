@@ -1,0 +1,12 @@
+.popup__caption {
+  font-size: 16px; /* Размер шрифта для текста */
+  color: #fff;
+  text-align: center; /* Выравнивание текста по центру */
+
+
+
+
+    top: calc(100% + 10px);
+      margin: 0;
+        position: relative;
+}

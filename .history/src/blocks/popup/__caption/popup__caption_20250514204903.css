@@ -1,0 +1,11 @@
+.popup__caption {
+  font-size: 12px;
+  line-height: 15px;
+  color: #fff;
+  text-align: left; /* Выравнивание текста по центру */
+  padding: 10px 0 0 0; /* Отступы вокруг текста */
+  visibility: visible;
+  max-width: 80%; 
+  word-wrap: break-word; 
+  margin: 0;    
+}

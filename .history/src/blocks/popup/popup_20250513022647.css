@@ -1,0 +1,80 @@
+@import url('./__content/popup__content.css');
+@import url('./__content/_content/popup__content_content_image.css');
+@import url('./__close/popup__close.css');
+@import url('./__title/popup__title.css');
+@import url('./__form/popup__form.css');
+@import url('./__input/popup__input.css');
+@import url('./__button/popup__button.css');
+@import url('./__caption/popup__caption.css');
+@import url('./__image/popup__image.css');
+
+.popup {
+  font-family: 'Inter', Arial, sans-serif;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, .5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10;
+}
+
+.popup_opened {
+  display: flex; /* Делает попап видимым */
+  opacity: 1; /* Делает попап видимым */
+}
+
+/* Стили для содержимого попапов */
+.popup__content {
+  background: white; /* Белый фон для контента попапа */
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px; /* Ширина попапа */
+  max-height: 80%; /* Максимальная высота попапа */
+  overflow-y: auto; /* Прокрутка, если содержимое превышает максимальную высоту */
+  position: relative; /* Чтобы позиционировать элементы внутри */
+}
+
+/* Стили для кнопки закрытия */
+.popup__close {
+  position: absolute; /* Кнопка закрытия в правом верхнем углу */
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+/* Анимации для попапов */
+@keyframes popup-fade-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.popup_opened .popup__content {
+  animation: popup-fade-in 0.3s ease-out;
+}
+
+/* Стили для фона попапа */
+.popup_opened {
+  animation: fade-background 0.3s ease-out;
+}
+
+@keyframes fade-background {
+  0% {
+    background: rgba(0, 0, 0, 0);
+  }
+  100% {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}

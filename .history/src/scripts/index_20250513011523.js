@@ -1,0 +1,40 @@
+
+import '../pages/index.css';
+
+
+
+export function createCard(cardData, deleteCard) {
+  const cardTemplate = document.querySelector("#card-template");
+  const cardElement = cardTemplate.content.querySelector(".card").cloneNode(true);
+
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
+  const cardDeleteButton = cardElement.querySelector(".card__delete-button");
+
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
+  cardTitle.textContent = cardData.name;
+
+  cardDeleteButton.addEventListener("click", () => deleteCard(cardElement));
+
+  return cardElement;
+}
+
+export function deleteCard(cardElement) {
+  cardElement.remove();
+}
+
+import '../pages/index.css';
+import { initialCards } from './cards.js';
+import { createCard, deleteCard } from './card.js';
+
+// Импорт изображения, если оно используется
+import logo from '../images/logo.svg';
+
+// Вывод карточек
+const placesList = document.querySelector('.places__list');
+
+initialCards.forEach((card) => {
+  const cardElement = createCard(card, deleteCard);
+  placesList.append(cardElement);
+});

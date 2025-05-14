@@ -1,0 +1,10 @@
+.popup_is-opened {
+  display: flex;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: all;
+  transition: visibility 0s, opacity 0.6s;
+  border-radius: 0; /* Убираем закругления */
+  width: 100%;      /* Устанавливаем размер изображения */
+  height: auto;     /* Оставляем пропорции изображения */
+}

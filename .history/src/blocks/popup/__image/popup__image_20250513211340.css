@@ -1,0 +1,19 @@
+.popup_type_image {
+  display: none;
+  /* Стили для попапа */
+}
+
+.popup_opened {
+  display: block;
+}
+
+.popup__image {
+  width: 100%;
+  max-width: 600px;
+}
+
+.popup__caption {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 10px;
+}

@@ -1,0 +1,22 @@
+.card__like-button {
+  width: 21px;
+  height: 18px;
+  background: transparent url('../../../images/like-inactive.svg') no-repeat;
+  background-size: 21px 18px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  transition: 0.3s;
+}
+
+/* Стиль для кнопки при наведении */
+.card__like-button:hover {
+  opacity: 0.6;
+}
+
+/* Стиль для активного лайка */
+.card__like-button_active {
+  background: transparent url('../../../images/like-active.svg') no-repeat;
+  background-size: 21px 18px;
+}

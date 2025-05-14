@@ -1,0 +1,17 @@
+.popup__close {
+  width: 30px;
+  height: 30px;
+  background-image: url('../../images/close.svg'); /* Путь от popup.css до images */
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: none;
+  cursor: pointer;
+  top: 10px;
+  right: 10px;
+  z-index: 1000; /* Добавим z-index, чтобы крестик был поверх других элементов */
+}
+
+.popup__close:hover {
+  opacity: 0.6;
+}

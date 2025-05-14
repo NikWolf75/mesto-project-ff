@@ -1,0 +1,18 @@
+.popup__image {
+  max-height: 100%;
+  max-width: 100%;
+  object-fit: cover;
+  display: block;
+}
+.popup__caption {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+.popup_type_image {
+  display: none;
+}
+
+.popup_opened {
+  display: block;
+}

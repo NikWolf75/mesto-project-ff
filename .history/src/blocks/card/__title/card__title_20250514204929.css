@@ -1,0 +1,11 @@
+.card__title {
+  max-width: 220px;          /* Максимальная ширина */
+  font-size: 24px;           /* Размер шрифта */
+  line-height: 29px;         /* Межстрочный интервал */
+  text-overflow: ellipsis;   /* Отображение троеточия при переполнении */
+  white-space: nowrap;       /* Запрещает перенос текста */
+  overflow: hidden;         
+  margin: 0;                 
+  display: block;          
+  text-align: center;       
+}

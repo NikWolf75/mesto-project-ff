@@ -1,0 +1,74 @@
+
+import '../pages/index.css';
+
+
+import '../pages/index.css';
+import { initialCards } from './cards.js';
+import { createCard, deleteCard } from './card.js';
+
+import logo from '../images/logo.svg'; // Используем import для загрузки изображений
+
+const img = document.createElement('img');
+img.src = logo;
+img.alt = 'Логотип проекта место';
+img.classList.add('logo', 'header__logo');
+document.body.appendChild(img);
+
+
+import avatar from '../images/avatar.jpg';
+
+const profileImage = document.querySelector('.profile__image');
+profileImage.style.backgroundImage = `url(${avatar})`;
+
+const logoImg = document.querySelector('.header__logo');
+logoImg.src = logo;
+// Вывод карточек
+const placesList = document.querySelector('.places__list');
+
+initialCards.forEach((card) => {
+  const cardElement = createCard(card, deleteCard);
+  placesList.append(cardElement);
+});
+
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
+const imageButton = document.querySelector('.profile__image');
+
+// Получаем все попапы
+const popupEdit = document.querySelector('.popup_type_edit');
+const popupImage = document.querySelector('.popup_type_image');
+const popupAvatarEdit = document.querySelector('.popup_type_avatar-edit');
+const popupCardDelete = document.querySelector('.popup_type__card-delete');
+
+// Получаем все кнопки закрытия попапов
+const closeButtons = document.querySelectorAll('.popup__close');
+
+// Функция открытия попапа
+function openPopup(popup) {
+  popup.classList.add('popup_opened');
+}
+
+
+// Открываем попапы при клике на соответствующие кнопки
+editButton.addEventListener('click', () => openPopup(popupEdit));
+addButton.addEventListener('click', () => openPopup(popupAvatarEdit));
+imageButton.addEventListener('click', () => openPopup(popupImage));
+
+const closeButtons1 = document.querySelectorAll('.popup__close');
+const closeButtons2 = document.querySelectorAll('.another-popup__close'); // для другого попапа
+
+// Обработчики для первой группы кнопок
+closeButtons1.forEach(button => {
+  button.addEventListener('click', () => {
+    const popup = button.closest('.popup');
+    popup.style.display = 'none';
+  });
+});
+
+// Обработчики для второй группы кнопок
+closeButtons2.forEach(button => {
+  button.addEventListener('click', () => {
+    const popup = button.closest('.another-popup');
+    popup.style.display = 'none';
+  });
+});

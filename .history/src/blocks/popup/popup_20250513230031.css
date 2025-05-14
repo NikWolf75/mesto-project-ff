@@ -1,0 +1,23 @@
+
+
+.popup {
+  font-family: 'Inter', Arial, sans-serif;
+  display: none; /* Скрыто по умолчанию */
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+  position: fixed; /* Фиксированное положение */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10; /* Поверх всего контента */
+  opacity: 0; /* Скрыто по умолчанию */
+  transition: opacity 0.3s ease; /* Плавное исчезновение */
+}
+
+.popup_opened {
+  display: flex; /* Когда попап открыт */
+  opacity: 1; /* Попап становится видимым */
+}
+

@@ -1,0 +1,69 @@
+@import url('./__content/popup__content.css');
+@import url('./__content/_content/popup__content_content_image.css');
+@import url('./__close/popup__close.css');
+@import url('./__title/popup__title.css');
+@import url('./__form/popup__form.css');
+@import url('./__input/popup__input.css');
+@import url('./__button/popup__button.css');
+@import url('./__caption/popup__caption.css');
+@import url('./__image/popup__image.css');
+
+.popup {
+  font-family: 'Inter', Arial, sans-serif;
+  display: none; /* Скрыто по умолчанию */
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5); /* Полупрозрачный фон */
+  position: fixed; /* Фиксированное положение */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 10; /* Поверх всего контента */
+  opacity: 0; /* Скрыто по умолчанию */
+  transition: opacity 0.3s ease; /* Плавное исчезновение */
+}
+
+.popup_opened {
+  display: flex; /* Когда попап открыт */
+  opacity: 1; /* Попап становится видимым */
+}
+
+/* Стили для инпутов с ошибками */
+.popup__input_type_error {
+  border-block-end: 1px solid #FF0000; /* Красная граница для инпутов с ошибками */
+}
+
+/* Стили для кнопки с состоянием "отключено" */
+.popup__button_disabled {
+  pointer-events: none; /* Отключает интерактивность */
+  color: rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: not-allowed;
+  background-color: #FFF;
+}
+
+/* Стили для отображения ошибок */
+.popup__error_visible {
+  font-family: 'Inter', sans-serif;
+  color: #FF0000; /* Красный цвет для ошибок */
+  font-size: 12px;
+  font-weight: 400;
+}
+
+.popup__image {
+  max-width: 90%;
+  max-height: 90%;
+  object-fit: contain;  /* Чтобы изображение сохраняло пропорции и не растягивалось */
+}
+
+.popup {
+  display: none;
+  /* ваши стили */
+}
+
+.popup_opened {
+  display: block;
+  /* стили для отображения попапа */
+}
+

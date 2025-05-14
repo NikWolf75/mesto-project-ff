@@ -1,0 +1,64 @@
+@import url('../vendor/normalize.css');
+@import url('../vendor/fonts.css');
+@import url('../blocks/page/page.css');
+@import url('../blocks/header/header.css');
+@import url('../blocks/content/content.css');
+@import url('../blocks/footer/footer.css');
+@import url('../blocks/profile/profile.css');
+@import url('../blocks/places/places.css');
+@import url('../blocks/card/card.css');
+@import url('../blocks/popup/popup.css');
+@import url('../blocks/popup/_is-animated/popup_is-animated.css');
+@import url('../blocks/popup/_is-opened/popup_is-opened.css');
+
+.popup {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.popup_opened {
+  display: flex;
+}
+
+/* Контейнер для изображения */
+.popup__image-container {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+/* Изображение во весь экран */
+.popup__image {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+/* Подпись к изображению */
+.popup__caption {
+  margin-top: 10px;
+  text-align: center;
+  color: #fff;
+  font-size: 16px;
+}
+
+/* Кнопка закрытия */
+.popup__close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  width: 32px;
+  height: 32px;
+  background-image: url('../../images/close.svg');
+  background-size: cover;
+  cursor: pointer;
+}
