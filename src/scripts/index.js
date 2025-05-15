@@ -1,7 +1,13 @@
 import "../pages/index.css";
 import { initialCards } from "./cards.js";
 import { createCard, deleteCard } from "./card.js";
-import { openPopup, closePopup, handleEscClose, handleLike, handleImageClick } from "./modal.js";
+import {
+  openPopup,
+  closePopup,
+  handleEscClose,
+  handleLike,
+  handleImageClick,
+} from "./modal.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 
