@@ -5,7 +5,7 @@ export function openPopup(popup) {
 
 export function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
-  
+
   if (popup.classList.contains("popup_type_image")) {
     const caption = popup.querySelector(".popup__caption");
     if (caption) caption.textContent = "";

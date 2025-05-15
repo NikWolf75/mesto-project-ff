@@ -28,7 +28,6 @@ const addCardForm = document.querySelector(".popup__form_type_add");
 const titleInput = addCardForm.querySelector(".popup__input_type_title");
 const linkInput = addCardForm.querySelector(".popup__input_type_link");
 
-
 profileAvatar.style.backgroundImage = `url(${avatar})`;
 logoElement.src = logo;
 
