@@ -1,21 +1,15 @@
 import "../pages/index.css";
 import { initialCards } from "./cards.js";
 import { createCard, deleteCard } from "./card.js";
-import { handleLike, handleImageClick } from "./handlers.js";
+import { openPopup, closePopup, handleEscClose, handleLike, handleImageClick } from "./modal.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 
-const img = document.createElement("img");
-img.src = logo;
-img.alt = "Логотип проекта место";
-img.classList.add("logo", "header__logo");
-document.body.appendChild(img);
+const profileAvatar = document.querySelector(".profile__image");
+profileAvatar.style.backgroundImage = `url(${avatar})`;
 
-const profileImage = document.querySelector(".profile__image");
-profileImage.style.backgroundImage = `url(${avatar})`;
-
-const logoImg = document.querySelector(".header__logo");
-logoImg.src = logo;
+const logoElement = document.querySelector(".header__logo");
+logoElement.src = logo;
 
 const placesList = document.querySelector(".places__list");
 initialCards.forEach((card) => {
@@ -35,26 +29,13 @@ const popupAddCard = document.querySelector(".popup_type_add");
 
 const closeButtons = document.querySelectorAll(".popup__close");
 
-function openPopup(popup) {
-  popup.classList.add("popup_opened");
-  document.addEventListener("keydown", handleEscClose);
-}
-
-const imagePopupElement = popupImagePopup.querySelector(".popup__image");
-const popupCaption = popupImagePopup.querySelector(".popup__caption");
-
-function closePopup(popup) {
-  popup.classList.remove("popup_opened");
-  document.removeEventListener("keydown", handleEscClose);
-}
-
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
-const imageButton = document.querySelector(".profile__image");
+const avatarEditButton = document.querySelector(".profile__image");
 
 editButton.addEventListener("click", () => openPopup(popupEdit));
 addButton.addEventListener("click", () => openPopup(popupAddCard));
-imageButton.addEventListener("click", () => openPopup(popupAvatarEdit));
+avatarEditButton.addEventListener("click", () => openPopup(popupAvatarEdit));
 
 closeButtons.forEach((button) => {
   button.addEventListener("click", (e) => {
@@ -71,20 +52,11 @@ document.querySelectorAll(".popup").forEach((popup) => {
   });
 });
 
-function handleEscClose(e) {
-  if (e.key === "Escape") {
-    const openedPopup = document.querySelector(".popup_opened");
-    if (openedPopup) {
-      closePopup(openedPopup);
-    }
-  }
-}
-
 const profileName = document.querySelector(".profile__title");
 const profileAbout = document.querySelector(".profile__description");
 const nameInput = document.querySelector(".popup__input_type_name");
 const jobInput = document.querySelector(".popup__input_type_description");
-const formElement = document.querySelector(".popup__form_type_edit");
+const editProfileForm = document.querySelector(".popup__form_type_edit");
 
 editButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
@@ -99,7 +71,7 @@ function handleFormSubmit(evt) {
   closePopup(popupEdit);
 }
 
-formElement.addEventListener("submit", handleFormSubmit);
+editProfileForm.addEventListener("submit", handleFormSubmit);
 
 const addCardForm = document.querySelector(".popup__form_type_add");
 
@@ -129,40 +101,6 @@ addCardForm.addEventListener("submit", (evt) => {
   closePopup(popupAddCard);
   addCardForm.reset();
 });
-initialCards.forEach((card) => {
-  const cardElement = createCard(
-    card,
-    deleteCard,
-    handleLike,
-    handleImageClick
-  );
-  placesList.append(cardElement);
-});
-
-function openAvatarPopup() {
-  const avatarPopup = document.querySelector(".popup_type_avatar");
-  openModal(avatarPopup);
-}
-
-function handleAvatarChange(evt) {
-  evt.preventDefault();
-
-  const avatarInput = document.querySelector('input[name="avatar"]');
-  const avatarFile = avatarInput.files[0];
-
-  if (avatarFile) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const newAvatar = event.target.result;
-      const avatarImage = document.querySelector("#profile-avatar");
-      avatarImage.src = newAvatar;
-      closeModal(document.querySelector(".popup_type_avatar"));
-    };
-    reader.readAsDataURL(avatarFile);
-  } else {
-    console.error("Нет изображения для загрузки");
-  }
-}
 
 const avatarForm = document.querySelector('.popup__form[name="avatar-edit"]');
 
@@ -174,7 +112,7 @@ avatarForm.addEventListener("submit", function (evt) {
 
   if (!newAvatarUrl) return;
 
-  profileImage.style.backgroundImage = `url(${newAvatarUrl})`;
+  profileAvatar.style.backgroundImage = `url(${newAvatarUrl})`;
 
   closePopup(popupAvatarEdit);
   avatarForm.reset();

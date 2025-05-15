@@ -14,15 +14,7 @@ export function createCard(
   const likeButton = cardElement.querySelector(".card__like-button");
   const deleteButton = cardElement.querySelector(".card__delete-button");
 
-  if (link) {
-    cardImage.src = link;
-  } else {
-    cardImage.src = "path/to/default-image.jpg";
-    console.warn(
-      "Путь к изображению пустой, используется изображение по умолчанию"
-    );
-  }
-
+  cardImage.src = link || "path/to/default-image.jpg";
   cardImage.alt = name;
   cardTitle.textContent = name;
   cardText.textContent = description;
@@ -44,35 +36,4 @@ export function createCard(
 
 export function deleteCard(cardElement) {
   cardElement.remove();
-}
-
-export function handleImageClick(evt) {
-  const imagePopupElement = document.querySelector(".popup__image");
-  const popupCaption = document.querySelector(".popup__caption");
-
-  imagePopupElement.src = evt.target.src;
-  imagePopupElement.alt = evt.target.alt;
-  popupCaption.textContent = evt.target.alt;
-
-  const popupImagePopup = document.querySelector(".popup_type_image");
-  openModal(popupImagePopup);
-}
-
-export function handleEscClose(event) {
-  if (event.key === "Escape") {
-    const openPopup = document.querySelector(".popup_opened");
-    closeModal(openPopup);
-  }
-}
-
-export function openModal(popup) {
-  popup.classList.add("popup_opened");
-  document.addEventListener("keydown", handleEscClose);
-}
-
-export function closeModal(popup) {
-  if (popup) {
-    popup.classList.remove("popup_opened");
-    document.removeEventListener("keydown", handleEscClose);
-  }
 }
