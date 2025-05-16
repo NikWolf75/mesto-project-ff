@@ -13,6 +13,9 @@ const popupEdit = document.querySelector(".popup_type_edit");
 const popupImage = document.querySelector(".popup_type_image");
 const popupAddCard = document.querySelector(".popup_type_add");
 
+const popupImageElem = popupImage.querySelector(".popup__image");
+const popupCaptionElem = popupImage.querySelector(".popup__caption");
+
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 
@@ -24,7 +27,6 @@ const jobInput = document.querySelector(".popup__input_type_description");
 const editProfileForm = document.querySelector(".popup__form_type_edit");
 
 const addCardForm = document.querySelector(".popup__form_type_add");
-
 const titleInput = addCardForm.querySelector(".popup__input_type_title");
 const linkInput = addCardForm.querySelector(".popup__input_type_link");
 
@@ -58,28 +60,16 @@ function handleAddCardFormSubmit(evt) {
 }
 
 function openImagePopup(evt) {
-  const popupImage = popupImageElem();
-  const popupCaption = popupCaptionElem();
-  const popup = popupImage.closest(".popup_type_image");
-
-  popupImage.src = evt.target.src;
-  popupImage.alt = evt.target.alt;
+  popupImageElem.src = evt.target.src;
+  popupImageElem.alt = evt.target.alt;
 
   const card = evt.target.closest(".card");
   const title = card.querySelector(".card__title").textContent;
   const description = card.querySelector(".card__text")?.textContent;
 
-  popupCaption.textContent = description ? `${title} - ${description}` : title;
+  popupCaptionElem.textContent = description ? `${title} - ${description}` : title;
 
-  openPopup(popup);
-}
-
-function popupImageElem() {
-  return document.querySelector(".popup__image");
-}
-
-function popupCaptionElem() {
-  return document.querySelector(".popup__caption");
+  openPopup(popupImage);
 }
 
 editButton.addEventListener("click", () => {

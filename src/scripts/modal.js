@@ -5,20 +5,7 @@ export function openPopup(popup) {
 
 export function closePopup(popup) {
   popup.classList.remove("popup_is-opened");
-
-  if (popup.classList.contains("popup_type_image")) {
-    const caption = popup.querySelector(".popup__caption");
-    if (caption) caption.textContent = "";
-    const image = popup.querySelector(".popup__image");
-    if (image) {
-      image.src = "";
-      image.alt = "";
-    }
-  }
-
-  setTimeout(() => {
-    document.removeEventListener("keydown", handleEscClose);
-  }, 300);
+  document.removeEventListener("keydown", handleEscClose);
 }
 
 export function handleEscClose(event) {

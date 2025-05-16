@@ -1,3 +1,22 @@
+export function openPopup(popup) {
+  popup.classList.add("popup_is-opened");
+  document.addEventListener("keydown", handleEscClose);
+}
+
+export function closePopup(popup) {
+  popup.classList.remove("popup_is-opened");
+  document.removeEventListener("keydown", handleEscClose);
+}
+
+export function handleEscClose(event) {
+  if (event.key === "Escape") {
+    const openedPopup = document.querySelector(".popup_is-opened");
+    if (openedPopup) {
+      closePopup(openedPopup);
+    }
+  }
+}
+
 export function toggleLike(event) {
   event.target.classList.toggle("card__like-button_is-active");
 }
@@ -8,10 +27,11 @@ export function createCard(
   toggleLike,
   openImagePopup
 ) {
-  const template = document
+  const card = document
     .querySelector("#card-template")
-    .content.cloneNode(true);
-  const card = template.querySelector(".card");
+    .content.querySelector(".card")
+    .cloneNode(true);
+
   const cardImage = card.querySelector(".card__image");
   const cardTitle = card.querySelector(".card__title");
   const cardText = card.querySelector(".card__text");
