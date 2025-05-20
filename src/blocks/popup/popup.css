@@ -51,23 +51,3 @@
   pointer-events: none;
 }
 
-.popup_opened {
-  display: flex;
-}
-
-.popup__content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  position: relative;
-}
-
-/* Кнопка закрытия */
-.popup__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-}
