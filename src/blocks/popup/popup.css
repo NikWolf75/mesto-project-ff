@@ -22,7 +22,6 @@
   visibility: hidden;
   opacity: 0;
   transition: visibility 0s, opacity 0.6s;
-  opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease;
   pointer-events: none;
@@ -32,4 +31,43 @@
   max-width: 90%;
   max-height: calc(100vh - 90px - 68px);
   object-fit: contain;
+}
+
+.popup__input-error {
+  color: red;
+  font-size: 12px;
+  min-height: 14px;
+  margin-top: 5px;
+}
+
+.popup__input_type_error {
+  border-color: red;
+}
+
+.popup__button_disabled {
+  background-color: #e5e5e5;
+  color: #aaa;
+  cursor: default;
+  pointer-events: none;
+}
+
+.popup_opened {
+  display: flex;
+}
+
+.popup__content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Кнопка закрытия */
+.popup__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
