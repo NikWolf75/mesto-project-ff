@@ -1,27 +1,11 @@
+// index.js
 import "../pages/index.css";
-import { initialCards } from "./cards.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
 import { enableValidation, resetValidation } from "./validation.js";
+import { getUserInfo, getInitialCards } from "./api.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
-
-// --- Добавляем функцию для получения данных пользователя с сервера ---
-const cohortId = "ваш-cohortId"; // <-- Вставь сюда свой cohortId
-const token = "ваш-токен"; // <-- Вставь сюда свой токен
-
-function getUserInfo() {
-  return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
-    headers: {
-      authorization: token,
-    },
-  }).then((res) => {
-    if (!res.ok) {
-      return Promise.reject(`Ошибка: ${res.status}`);
-    }
-    return res.json();
-  });
-}
 
 const profileName = document.querySelector(".profile__title");
 const profileAbout = document.querySelector(".profile__description");
@@ -50,17 +34,21 @@ const linkInput = addCardForm.querySelector(".popup__input_type_link");
 logoElement.src = logo;
 profileAvatar.style.backgroundImage = `url(${avatar})`;
 
-// --- Обновление профиля в DOM ---
 function updateProfile(user) {
   profileName.textContent = user.name;
   profileAbout.textContent = user.about;
   profileAvatar.style.backgroundImage = `url(${user.avatar})`;
 }
 
-// --- Загрузка информации о пользователе с сервера ---
-getUserInfo()
-  .then((userData) => {
+function renderCard(cardData, userId) {
+  const cardElement = createCard(cardData, deleteCard, toggleLike, openImagePopup, userId);
+  placesList.append(cardElement);
+}
+
+Promise.all([getUserInfo(), getInitialCards()])
+  .then(([userData, cardsData]) => {
     updateProfile(userData);
+    cardsData.forEach(card => renderCard(card, userData._id));
   })
   .catch((err) => {
     console.error(err);
@@ -75,12 +63,10 @@ function handleProfileFormSubmit(evt) {
 
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
-
   const newCard = {
     name: titleInput.value,
     link: linkInput.value,
   };
-
   const cardElement = createCard(newCard, deleteCard, toggleLike, openImagePopup);
   placesList.prepend(cardElement);
   closePopup(popupAddCard);
@@ -133,11 +119,6 @@ document.querySelectorAll(".popup").forEach((popup) => {
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
-
-initialCards.forEach((card) => {
-  const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup);
-  placesList.append(cardElement);
-});
 
 enableValidation({
   formSelector: ".popup__form",
