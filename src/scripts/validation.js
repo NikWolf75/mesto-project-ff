@@ -149,8 +149,8 @@ export function enableValidation({ formSelector }) {
 export function resetValidation(form) {
   const inputs = Array.from(form.querySelectorAll(".popup__input"));
   inputs.forEach((input) => {
-    hideInputError(form, input);  // очищаем ошибки текста
-    input.value = "";             // очищаем значения input (если нужно)
+    hideInputError(form, input);
+    input.value = "";
   });
   const button = form.querySelector(".popup__button");
   button.disabled = true;

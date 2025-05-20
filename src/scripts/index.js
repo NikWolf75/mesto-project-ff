@@ -2,7 +2,7 @@ import "../pages/index.css";
 import { initialCards } from "./cards.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
-import { enableValidation, resetValidation } from "./validation.js"; // <-- импорт валидации
+import { enableValidation, resetValidation } from "./validation.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 
@@ -49,12 +49,7 @@ function handleAddCardFormSubmit(evt) {
     link: linkInput.value,
   };
 
-  const cardElement = createCard(
-    newCard,
-    deleteCard,
-    toggleLike,
-    openImagePopup
-  );
+  const cardElement = createCard(newCard, deleteCard, toggleLike, openImagePopup);
   placesList.prepend(cardElement);
   closePopup(popupAddCard);
   addCardForm.reset();
@@ -76,12 +71,12 @@ function openImagePopup(evt) {
 editButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileAbout.textContent;
-  resetValidation(editProfileForm); // сброс ошибок при открытии
+  resetValidation(editProfileForm);
   openPopup(popupEdit);
 });
 
 addButton.addEventListener("click", () => {
-  resetValidation(addCardForm); // сброс ошибок при открытии
+  resetValidation(addCardForm);
   openPopup(popupAddCard);
 });
 
@@ -112,7 +107,6 @@ initialCards.forEach((card) => {
   placesList.append(cardElement);
 });
 
-// Включаем валидацию для всех форм с классом popup__form
 enableValidation({
   formSelector: ".popup__form",
 });
