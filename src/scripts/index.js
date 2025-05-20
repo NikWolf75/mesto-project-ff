@@ -6,6 +6,25 @@ import { enableValidation, resetValidation } from "./validation.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 
+// --- Добавляем функцию для получения данных пользователя с сервера ---
+const cohortId = "ваш-cohortId"; // <-- Вставь сюда свой cohortId
+const token = "ваш-токен"; // <-- Вставь сюда свой токен
+
+function getUserInfo() {
+  return fetch(`https://nomoreparties.co/v1/${cohortId}/users/me`, {
+    headers: {
+      authorization: token,
+    },
+  }).then((res) => {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  });
+}
+
+const profileName = document.querySelector(".profile__title");
+const profileAbout = document.querySelector(".profile__description");
 const profileAvatar = document.querySelector(".profile__image");
 const logoElement = document.querySelector(".header__logo");
 const placesList = document.querySelector(".places__list");
@@ -20,9 +39,6 @@ const popupCaptionElem = popupImage.querySelector(".popup__caption");
 const editButton = document.querySelector(".profile__edit-button");
 const addButton = document.querySelector(".profile__add-button");
 
-const profileName = document.querySelector(".profile__title");
-const profileAbout = document.querySelector(".profile__description");
-
 const nameInput = document.querySelector(".popup__input_type_name");
 const jobInput = document.querySelector(".popup__input_type_description");
 const editProfileForm = document.querySelector(".popup__form_type_edit");
@@ -31,8 +47,24 @@ const addCardForm = document.querySelector(".popup__form_type_add");
 const titleInput = addCardForm.querySelector(".popup__input_type_title");
 const linkInput = addCardForm.querySelector(".popup__input_type_link");
 
-profileAvatar.style.backgroundImage = `url(${avatar})`;
 logoElement.src = logo;
+profileAvatar.style.backgroundImage = `url(${avatar})`;
+
+// --- Обновление профиля в DOM ---
+function updateProfile(user) {
+  profileName.textContent = user.name;
+  profileAbout.textContent = user.about;
+  profileAvatar.style.backgroundImage = `url(${user.avatar})`;
+}
+
+// --- Загрузка информации о пользователе с сервера ---
+getUserInfo()
+  .then((userData) => {
+    updateProfile(userData);
+  })
+  .catch((err) => {
+    console.error(err);
+  });
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
