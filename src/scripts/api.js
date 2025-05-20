@@ -49,4 +49,13 @@ function addNewCard({ name, link }) {
   }).then(checkResponse);
 }
 
-export { getUserInfo, getInitialCards, updateUserInfo, addNewCard };
+function apiDeleteCard(cardId) {
+  return fetch(`${baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: {
+      authorization: token,
+    },
+  }).then(checkResponse);
+}
+
+export { getUserInfo, getInitialCards, updateUserInfo, addNewCard, apiDeleteCard };

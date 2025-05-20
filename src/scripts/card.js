@@ -1,3 +1,6 @@
+// card.js
+import { apiDeleteCard } from "./api.js";
+
 export function toggleLike(event) {
   const likeButton = event.target;
   const likeCountElem = likeButton.nextElementSibling;
@@ -13,15 +16,22 @@ export function toggleLike(event) {
   likeCountElem.textContent = count;
 }
 
-export function deleteCard(card) {
-  card.remove();
+export function deleteCard(card, cardId) {
+  apiDeleteCard(cardId)
+    .then(() => {
+      card.remove();
+    })
+    .catch((err) => {
+      console.error("Ошибка удаления карточки:", err);
+    });
 }
 
 export function createCard(
-  { name, link, description, likes = [] },
+  { name, link, description, likes = [], _id, owner },
   deleteCard,
   toggleLike,
-  openImagePopup
+  openImagePopup,
+  currentUserId
 ) {
   const card = document
     .querySelector("#card-template")
@@ -46,8 +56,14 @@ export function createCard(
     likeButton.classList.add("card__like-button_is-active");
   }
 
+  if (owner && owner._id === currentUserId) {
+    deleteButton.style.display = "block";
+  } else {
+    deleteButton.style.display = "none";
+  }
+
   likeButton.addEventListener("click", toggleLike);
-  deleteButton.addEventListener("click", () => deleteCard(card));
+  deleteButton.addEventListener("click", () => deleteCard(card, _id));
   cardImage.addEventListener("click", openImagePopup);
 
   return card;

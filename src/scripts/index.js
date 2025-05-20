@@ -1,3 +1,4 @@
+// index.js
 import "../pages/index.css";
 import { getUserInfo, getInitialCards, updateUserInfo, addNewCard } from "./api.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
