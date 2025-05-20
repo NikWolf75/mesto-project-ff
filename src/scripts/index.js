@@ -1,9 +1,8 @@
-// index.js
 import "../pages/index.css";
+import { getUserInfo, getInitialCards, updateUserInfo, addNewCard } from "./api.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
 import { enableValidation, resetValidation } from "./validation.js";
-import { getUserInfo, getInitialCards } from "./api.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 
@@ -34,43 +33,48 @@ const linkInput = addCardForm.querySelector(".popup__input_type_link");
 logoElement.src = logo;
 profileAvatar.style.backgroundImage = `url(${avatar})`;
 
+let userId = null;
+
 function updateProfile(user) {
   profileName.textContent = user.name;
   profileAbout.textContent = user.about;
   profileAvatar.style.backgroundImage = `url(${user.avatar})`;
-}
-
-function renderCard(cardData, userId) {
-  const cardElement = createCard(cardData, deleteCard, toggleLike, openImagePopup, userId);
-  placesList.append(cardElement);
+  userId = user._id;
 }
 
 Promise.all([getUserInfo(), getInitialCards()])
-  .then(([userData, cardsData]) => {
+  .then(([userData, cards]) => {
     updateProfile(userData);
-    cardsData.forEach(card => renderCard(card, userData._id));
+    cards.forEach((card) => {
+      const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup, userId);
+      placesList.append(cardElement);
+    });
   })
-  .catch((err) => {
-    console.error(err);
-  });
+  .catch(console.error);
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-  profileName.textContent = nameInput.value;
-  profileAbout.textContent = jobInput.value;
-  closePopup(popupEdit);
+
+  updateUserInfo({ name: nameInput.value, about: jobInput.value })
+    .then((updatedUser) => {
+      updateProfile(updatedUser);
+      closePopup(popupEdit);
+    })
+    .catch(console.error);
 }
 
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
-  const newCard = {
-    name: titleInput.value,
-    link: linkInput.value,
-  };
-  const cardElement = createCard(newCard, deleteCard, toggleLike, openImagePopup);
-  placesList.prepend(cardElement);
-  closePopup(popupAddCard);
-  addCardForm.reset();
+
+  addNewCard({ name: titleInput.value, link: linkInput.value })
+    .then((card) => {
+      const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup, userId);
+      placesList.prepend(cardElement);
+      closePopup(popupAddCard);
+      addCardForm.reset();
+      resetValidation(addCardForm);
+    })
+    .catch(console.error);
 }
 
 function openImagePopup(evt) {

@@ -27,4 +27,26 @@ function getInitialCards() {
   }).then(checkResponse);
 }
 
-export { getUserInfo, getInitialCards };
+function updateUserInfo({ name, about }) {
+  return fetch(`${baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: {
+      authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, about }),
+  }).then(checkResponse);
+}
+
+function addNewCard({ name, link }) {
+  return fetch(`${baseUrl}/cards`, {
+    method: "POST",
+    headers: {
+      authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name, link }),
+  }).then(checkResponse);
+}
+
+export { getUserInfo, getInitialCards, updateUserInfo, addNewCard };
