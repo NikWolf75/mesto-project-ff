@@ -1,92 +1,158 @@
-function showInputError(form, input, errorMessage) {
+function showInputError(form, input, message) {
   const errorElement = form.querySelector(`.${input.name}-error`);
+  if (!errorElement) return;
   input.classList.add("popup__input_type_error");
-  errorElement.textContent = errorMessage;
+  errorElement.textContent = message;
+  errorElement.classList.add("popup__input-error_visible");
 }
 
 function hideInputError(form, input) {
   const errorElement = form.querySelector(`.${input.name}-error`);
+  if (!errorElement) return;
   input.classList.remove("popup__input_type_error");
   errorElement.textContent = "";
+  errorElement.classList.remove("popup__input-error_visible");
 }
 
 function checkInputValidityProfile(form, input) {
-  if (input.validity.valueMissing) {
-    showInputError(form, input, "Вы пропустили это поле");
-  } else if (input.name === "name" || input.name === "description") {
-    if (input.value.length < 2) {
-      showInputError(form, input, `Минимальное количество символов: 2. Сейчас: ${input.value.length}`);
-    } else if (input.validity.patternMismatch) {
-      showInputError(form, input, "Недопустимые символы. Разрешены только буквы, пробелы и дефисы.");
-    } else {
-      hideInputError(form, input);
-    }
-  } else {
-    hideInputError(form, input);
+  const regex = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
+
+  if (!input.value) {
+    showInputError(form, input, "Вы пропустили это поле.");
+    return false;
   }
-}
 
-function checkInputValidityPlace(form, input) {
-  const titlePattern = /^[a-zA-Zа-яА-ЯёЁ\s-]{2,30}$/;
-
-  if (input.validity.valueMissing) {
-    showInputError(form, input, "Пожалуйста, заполните это поле");
-  } else if (input.name === "title") {
-    if (!titlePattern.test(input.value)) {
-      showInputError(form, input, "Допустимы буквы, пробелы и дефисы (2-30 символов)");
-    } else {
-      hideInputError(form, input);
+  if (input.name === "name") {
+    if (input.value.length < 2 || input.value.length > 40) {
+      showInputError(
+        form,
+        input,
+        `Минимальное количество символов: 2. Длина текста сейчас: ${input.value.length} ${
+          input.value.length === 1 ? "символ" : "символов"
+        }.`
+      );
+      return false;
     }
-  } else if (input.type === "url" && input.validity.typeMismatch) {
-    showInputError(form, input, "Введите корректный URL");
-  } else {
-    hideInputError(form, input);
+    if (!regex.test(input.value)) {
+      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы");
+      return false;
+    }
   }
+
+  if (input.name === "description") {
+    if (input.value.length < 2 || input.value.length > 200) {
+      showInputError(
+        form,
+        input,
+        `Минимальное количество символов: 2. Длина текста сейчас: ${input.value.length} ${
+          input.value.length === 1 ? "символ" : "символов"
+        }.`
+      );
+      return false;
+    }
+    if (!regex.test(input.value)) {
+      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы");
+      return false;
+    }
+  }
+
+  hideInputError(form, input);
+  return true;
 }
 
-function toggleButtonState(inputs, button) {
-  const isValid = inputs.every((input) => input.validity.valid);
-  button.disabled = !isValid;
-  button.classList.toggle("popup__button_disabled", !isValid);
+function checkInputValidityAddCard(form, input) {
+  const regex = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
+
+  if (!input.value) {
+    showInputError(form, input, "Вы пропустили это поле.");
+    return false;
+  }
+
+  if (input.name === "title") {
+    if (input.value.length > 30) {
+      showInputError(
+        form,
+        input,
+        `Максимальное количество символов: 30. Длина текста сейчас: ${input.value.length} ${
+          input.value.length === 1 ? "символ" : "символов"
+        }.`
+      );
+      return false;
+    }
+    if (!regex.test(input.value)) {
+      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы");
+      return false;
+    }
+  }
+
+  if (input.name === "link") {
+    try {
+      new URL(input.value);
+    } catch {
+      showInputError(form, input, "Введите адрес сайта.");
+      return false;
+    }
+  }
+
+  hideInputError(form, input);
+  return true;
 }
 
-function setEventListeners(form, checkValidityFn) {
+function toggleButtonState(inputs, button, validityCheck) {
+  const allValid = inputs.every(
+    (input) => input.validity.valid && validityCheck(input.closest("form"), input)
+  );
+  button.disabled = !allValid;
+  button.classList.toggle("popup__button_disabled", !allValid);
+}
+
+function setProfileFormValidation(form) {
   const inputs = Array.from(form.querySelectorAll(".popup__input"));
   const button = form.querySelector(".popup__button");
 
   inputs.forEach((input) => {
     input.addEventListener("input", () => {
-      checkValidityFn(form, input);
-      toggleButtonState(inputs, button);
+      checkInputValidityProfile(form, input);
+      toggleButtonState(inputs, button, checkInputValidityProfile);
     });
   });
 
-  toggleButtonState(inputs, button);
+  toggleButtonState(inputs, button, checkInputValidityProfile);
+}
+
+function setAddCardFormValidation(form) {
+  const inputs = Array.from(form.querySelectorAll(".popup__input"));
+  const button = form.querySelector(".popup__button");
+
+  inputs.forEach((input) => {
+    input.addEventListener("input", () => {
+      checkInputValidityAddCard(form, input);
+      toggleButtonState(inputs, button, checkInputValidityAddCard);
+    });
+  });
+
+  toggleButtonState(inputs, button, checkInputValidityAddCard);
 }
 
 export function enableValidation({ formSelector }) {
-  const forms = document.querySelectorAll(formSelector);
-
+  const forms = Array.from(document.querySelectorAll(formSelector));
   forms.forEach((form) => {
-    form.addEventListener("submit", (evt) => evt.preventDefault());
-
     if (form.classList.contains("popup__form_type_edit")) {
-      setEventListeners(form, checkInputValidityProfile);
-    } else if (form.classList.contains("popup__form_type_add")) {
-      setEventListeners(form, checkInputValidityPlace);
-    } else {
-      setEventListeners(form, checkInputValidityProfile);
+      setProfileFormValidation(form);
+    }
+    if (form.classList.contains("popup__form_type_add")) {
+      setAddCardFormValidation(form);
     }
   });
 }
 
 export function resetValidation(form) {
   const inputs = Array.from(form.querySelectorAll(".popup__input"));
-  const button = form.querySelector(".popup__button");
-
   inputs.forEach((input) => {
-    hideInputError(form, input);
+    hideInputError(form, input);  // очищаем ошибки текста
+    input.value = "";             // очищаем значения input (если нужно)
   });
-
-  toggleButtonState(inputs, button);
+  const button = form.querySelector(".popup__button");
+  button.disabled = true;
+  button.classList.add("popup__button_disabled");
 }

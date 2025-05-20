@@ -2,6 +2,7 @@ import "../pages/index.css";
 import { initialCards } from "./cards.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
+import { enableValidation, resetValidation } from "./validation.js"; // <-- импорт валидации
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 
@@ -75,19 +76,31 @@ function openImagePopup(evt) {
 editButton.addEventListener("click", () => {
   nameInput.value = profileName.textContent;
   jobInput.value = profileAbout.textContent;
+  resetValidation(editProfileForm); // сброс ошибок при открытии
   openPopup(popupEdit);
 });
 
-addButton.addEventListener("click", () => openPopup(popupAddCard));
+addButton.addEventListener("click", () => {
+  resetValidation(addCardForm); // сброс ошибок при открытии
+  openPopup(popupAddCard);
+});
 
 document.querySelectorAll(".popup__close").forEach((button) => {
   const popup = button.closest(".popup");
-  button.addEventListener("click", () => closePopup(popup));
+  button.addEventListener("click", () => {
+    const form = popup.querySelector("form");
+    if (form) resetValidation(form);
+    closePopup(popup);
+  });
 });
 
 document.querySelectorAll(".popup").forEach((popup) => {
   popup.addEventListener("mousedown", (e) => {
-    if (e.target === popup) closePopup(popup);
+    if (e.target === popup) {
+      const form = popup.querySelector("form");
+      if (form) resetValidation(form);
+      closePopup(popup);
+    }
   });
 });
 
@@ -97,4 +110,9 @@ addCardForm.addEventListener("submit", handleAddCardFormSubmit);
 initialCards.forEach((card) => {
   const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup);
   placesList.append(cardElement);
+});
+
+// Включаем валидацию для всех форм с классом popup__form
+enableValidation({
+  formSelector: ".popup__form",
 });

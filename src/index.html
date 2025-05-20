@@ -41,28 +41,32 @@
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form
-            class="popup__form popup__form_type_edit"
-            name="edit-profile"
-            novalidate
-          >
+          <form class="popup__form popup__form_type_edit" name="edit-profile" novalidate>
             <input
               type="text"
               name="name"
               class="popup__input popup__input_type_name"
               placeholder="Имя"
               required
+              minlength="2"
+              maxlength="40"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$"
             />
+            <span class="popup__input-error name-error"></span>
+
             <input
               type="text"
               name="description"
               class="popup__input popup__input_type_description"
               placeholder="Занятие"
               required
+              minlength="2"
+              maxlength="200"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$"
             />
-            <button type="submit" class="button popup__button">
-              Сохранить
-            </button>
+            <span class="popup__input-error description-error"></span>
+
+            <button type="submit" class="button popup__button" disabled>Сохранить</button>
           </form>
         </div>
       </div>
@@ -82,7 +86,12 @@
               class="popup__input popup__input_type_title"
               placeholder="Название"
               required
+              minlength="2"
+              maxlength="30"
+              pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$"
             />
+            <span class="popup__input-error title-error"></span>
+
             <input
               type="url"
               name="link"
@@ -90,7 +99,9 @@
               placeholder="Ссылка на картинку"
               required
             />
-            <button type="submit" class="button popup__button">Создать</button>
+            <span class="popup__input-error link-error"></span>
+
+            <button type="submit" class="button popup__button" disabled>Создать</button>
           </form>
         </div>
       </div>
