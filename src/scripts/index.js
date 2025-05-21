@@ -1,7 +1,11 @@
-// index.js
-
 import "../pages/index.css";
-import { getUserInfo, getInitialCards, updateUserInfo, addNewCard } from "./api.js";
+import {
+  getUserInfo,
+  getInitialCards,
+  updateUserInfo,
+  addNewCard,
+  updateAvatar
+} from "./api.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
 import {
   avatarForm,
@@ -66,7 +70,7 @@ Promise.all([getUserInfo(), getInitialCards()])
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
 
-  updateUserInfo({ name: nameInput.value.trim(), about: jobInput.value.trim() })
+  updateUserInfo({ name: nameInput.value, about: jobInput.value })
     .then((updatedUser) => {
       updateProfile(updatedUser);
       closePopup(popupEdit);
@@ -77,13 +81,26 @@ function handleProfileFormSubmit(evt) {
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
 
-  addNewCard({ name: titleInput.value.trim(), link: linkInput.value.trim() })
+  addNewCard({ name: titleInput.value, link: linkInput.value })
     .then((card) => {
       const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup, userId);
       placesList.prepend(cardElement);
       closePopup(popupAddCard);
       addCardForm.reset();
       resetValidation(addCardForm);
+    })
+    .catch(console.error);
+}
+
+function handleAvatarFormSubmit(evt) {
+  evt.preventDefault();
+
+  updateAvatar(avatarInput.value)
+    .then((updatedUser) => {
+      updateProfile(updatedUser);
+      closePopup(avatarPopup);
+      avatarForm.reset();
+      resetValidation(avatarForm);
     })
     .catch(console.error);
 }
@@ -110,9 +127,9 @@ function openImagePopup(evt) {
 }
 
 editButton.addEventListener("click", () => {
+  resetValidation(editProfileForm); // очищаем ошибки и кнопки, но НЕ очищаем значения
   nameInput.value = profileName.textContent.trim();
   jobInput.value = profileAbout.textContent.trim();
-  resetValidation(editProfileForm);
   openPopup(popupEdit);
 });
 
@@ -142,6 +159,7 @@ document.querySelectorAll(".popup").forEach((popup) => {
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 enableValidation({
   formSelector: ".popup__form"
