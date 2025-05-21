@@ -20,3 +20,16 @@
     text-align: center;
   }
 }
+
+.popup__content-image {
+  position: relative;
+  max-width: 90vw;
+  max-height: calc(100vh - 90px - 68px);
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
