@@ -1,5 +1,4 @@
 import { likeCard, unlikeCard, deleteCardFromServer } from "./api.js";
-import { openConfirmPopup } from "./modal.js";
 
 export function toggleLike(event) {
   const likeButton = event.target;
@@ -54,21 +53,20 @@ export function createCard(
 
   likeCountElem.textContent = likes.length;
 
-  if (likes.some(user => user._id === currentUserId)) {
+  if (likes.some((user) => user._id === currentUserId)) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
-if (owner && owner._id === currentUserId) {
-  deleteButton.style.display = "block";
-  deleteButton.addEventListener("click", () => {
-    // Вместо открытия попапа вызывай функцию из параметров
-    if (typeof _ === "function") {
-      _.call(null, _id, card);
-    }
-  });
-} else {
-  deleteButton.style.display = "none";
-}
+  if (owner && owner._id === currentUserId) {
+    deleteButton.style.display = "block";
+    deleteButton.addEventListener("click", () => {
+      if (typeof _ === "function") {
+        _.call(null, _id, card);
+      }
+    });
+  } else {
+    deleteButton.style.display = "none";
+  }
 
   likeButton.addEventListener("click", toggleLike);
   cardImage.addEventListener("click", openImagePopup);

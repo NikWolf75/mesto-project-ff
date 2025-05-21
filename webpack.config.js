@@ -6,10 +6,11 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 
 module.exports = {
-  entry: "./src/scripts/index.js", 
+  entry: "./src/scripts/index.js",
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js",
+    publicPath: "/mesto-project-ff/",
   },
   module: {
     rules: [
@@ -28,31 +29,31 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: "babel-loader", 
+          loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env"], 
+            presets: ["@babel/preset-env"],
           },
         },
       },
       {
-        test: /\.css$/, 
+        test: /\.css$/,
         use: [
-          "style-loader",
-          "css-loader", 
+          MiniCssExtractPlugin.loader,
+          "css-loader",
           "postcss-loader",
         ],
       },
       {
-        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
+        test: /\.(png|svg|jpg|gif|woff2?|eot|ttf|otf)$/,
         type: "asset/resource",
       },
     ],
   },
   devServer: {
-    static: path.join(__dirname, "dist"), 
-    compress: true, 
-    port: 9000, 
-    open: true, 
+    static: path.join(__dirname, "dist"),
+    compress: true,
+    port: 9000,
+    open: true,
   },
   optimization: {
     minimize: true,
@@ -63,7 +64,9 @@ module.exports = {
       template: "./src/index.html",
     }),
     new CleanWebpackPlugin(),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "style.css",
+    }),
   ],
   mode: "production",
 };

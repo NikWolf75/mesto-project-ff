@@ -1,10 +1,9 @@
-// api.js
 const config = {
-  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-39',
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-39",
   headers: {
-    authorization: 'ba26a2bd-21bb-4faa-8017-2c8d6bacad83',
-    'Content-Type': 'application/json'
-  }
+    authorization: "ba26a2bd-21bb-4faa-8017-2c8d6bacad83",
+    "Content-Type": "application/json",
+  },
 };
 
 function checkResponse(res) {
@@ -16,16 +15,14 @@ function checkResponse(res) {
 
 export const getUserInfo = () => {
   return fetch(`${config.baseUrl}/users/me`, {
-    headers: config.headers
-  })
-  .then(checkResponse);
+    headers: config.headers,
+  }).then(checkResponse);
 };
 
 export const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
-    headers: config.headers
-  })
-  .then(checkResponse);
+    headers: config.headers,
+  }).then(checkResponse);
 };
 
 export const updateUserInfo = ({ name, about }) => {
@@ -33,8 +30,7 @@ export const updateUserInfo = ({ name, about }) => {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ name, about }),
-  })
-  .then(checkResponse);
+  }).then(checkResponse);
 };
 
 export const addNewCard = ({ name, link }) => {
@@ -42,32 +38,28 @@ export const addNewCard = ({ name, link }) => {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({ name, link }),
-  })
-  .then(checkResponse);
+  }).then(checkResponse);
 };
 
 export const likeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
-  })
-  .then(checkResponse);
+  }).then(checkResponse);
 };
 
 export const unlikeCard = (cardId) => {
   return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-  .then(checkResponse);
+  }).then(checkResponse);
 };
 
 export const deleteCardFromServer = (cardId) => {
   return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  })
-  .then(checkResponse);
+  }).then(checkResponse);
 };
 
 export const updateAvatar = (avatarUrl) => {
@@ -75,6 +67,5 @@ export const updateAvatar = (avatarUrl) => {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ avatar: avatarUrl }),
-  })
-  .then(checkResponse);
+  }).then(checkResponse);
 };

@@ -65,13 +65,13 @@ Promise.all([getUserInfo(), getInitialCards()])
   .then(([userData, cards]) => {
     updateProfile(userData);
     cards.forEach((card) => {
-const cardElement = createCard(
-  card,
-  (cardId, cardElement) => handleDeleteCard(cardId, cardElement), // сюда передаем колбэк для открытия подтверждения
-  toggleLike,
-  openImagePopup,
-  userId
-);
+      const cardElement = createCard(
+        card,
+        (cardId, cardElement) => handleDeleteCard(cardId, cardElement), // сюда передаем колбэк для открытия подтверждения
+        toggleLike,
+        openImagePopup,
+        userId
+      );
       placesList.append(cardElement);
     });
   })
@@ -170,7 +170,9 @@ function openImagePopup(evt) {
   const title = card.querySelector(".card__title").textContent;
   const description = card.querySelector(".card__text")?.textContent;
 
-  popupCaptionElem.textContent = description ? `${title} - ${description}` : title;
+  popupCaptionElem.textContent = description
+    ? `${title} - ${description}`
+    : title;
 
   openPopup(popupImage);
 }

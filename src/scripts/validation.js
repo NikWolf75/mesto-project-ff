@@ -1,5 +1,7 @@
 function showInputError(form, input, message) {
-  const errorElement = form.querySelector(`.${input.name}-error, .popup__error_type_${input.name}`);
+  const errorElement = form.querySelector(
+    `.${input.name}-error, .popup__error_type_${input.name}`
+  );
   if (!errorElement) return;
   input.classList.add("popup__input_type_error");
   errorElement.textContent = message;
@@ -7,7 +9,9 @@ function showInputError(form, input, message) {
 }
 
 function hideInputError(form, input) {
-  const errorElement = form.querySelector(`.${input.name}-error, .popup__error_type_${input.name}`);
+  const errorElement = form.querySelector(
+    `.${input.name}-error, .popup__error_type_${input.name}`
+  );
   if (!errorElement) return;
   input.classList.remove("popup__input_type_error");
   errorElement.textContent = "";
@@ -27,9 +31,9 @@ function checkInputValidityProfile(form, input) {
       showInputError(
         form,
         input,
-        `Минимальное количество символов: 2. Длина текста сейчас: ${input.value.length} ${
-          input.value.length === 1 ? "символ" : "символов"
-        }.`
+        `Минимальное количество символов: 2. Длина текста сейчас: ${
+          input.value.length
+        } ${input.value.length === 1 ? "символ" : "символов"}.`
       );
       return false;
     }
@@ -44,9 +48,9 @@ function checkInputValidityProfile(form, input) {
       showInputError(
         form,
         input,
-        `Минимальное количество символов: 2. Длина текста сейчас: ${input.value.length} ${
-          input.value.length === 1 ? "символ" : "символов"
-        }.`
+        `Минимальное количество символов: 2. Длина текста сейчас: ${
+          input.value.length
+        } ${input.value.length === 1 ? "символ" : "символов"}.`
       );
       return false;
     }
@@ -73,9 +77,9 @@ function checkInputValidityAddCard(form, input) {
       showInputError(
         form,
         input,
-        `Максимальное количество символов: 30. Длина текста сейчас: ${input.value.length} ${
-          input.value.length === 1 ? "символ" : "символов"
-        }.`
+        `Максимальное количество символов: 30. Длина текста сейчас: ${
+          input.value.length
+        } ${input.value.length === 1 ? "символ" : "символов"}.`
       );
       return false;
     }
@@ -117,7 +121,8 @@ function checkInputValidityAvatar(form, input) {
 
 function toggleButtonState(inputs, button, validityCheck) {
   const allValid = inputs.every(
-    (input) => input.validity.valid && validityCheck(input.closest("form"), input)
+    (input) =>
+      input.validity.valid && validityCheck(input.closest("form"), input)
   );
   button.disabled = !allValid;
   button.classList.toggle("popup__button_disabled", !allValid);

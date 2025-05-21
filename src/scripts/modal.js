@@ -2,7 +2,9 @@ import { updateAvatar } from "./api.js";
 
 export const avatarPopup = document.querySelector(".popup_type_avatar");
 export const avatarForm = avatarPopup.querySelector(".popup__form");
-export const avatarInput = avatarForm.querySelector(".popup__input_type_avatar");
+export const avatarInput = avatarForm.querySelector(
+  ".popup__input_type_avatar"
+);
 export const avatarSubmitButton = avatarForm.querySelector(".popup__button");
 export const avatarImage = document.querySelector(".profile__image");
 
