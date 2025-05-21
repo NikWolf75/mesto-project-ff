@@ -1,8 +1,10 @@
-export const avatarForm = document.querySelector("form[name='avatar']");
+import { updateAvatar } from "./api.js";
+
+export const avatarPopup = document.querySelector(".popup_type_avatar");
+export const avatarForm = avatarPopup.querySelector(".popup__form");
 export const avatarInput = avatarForm.querySelector(".popup__input_type_avatar");
 export const avatarSubmitButton = avatarForm.querySelector(".popup__button");
 export const avatarImage = document.querySelector(".profile__image");
-export const avatarPopup = document.querySelector(".popup_type_avatar");
 
 export function openPopup(popup) {
   popup.classList.add("popup_opened");
@@ -16,15 +18,23 @@ export function closePopup(popup) {
 
 function handleEscClose(evt) {
   if (evt.key === "Escape") {
-    const openPopup = document.querySelector(".popup_opened");
-    if (openPopup) {
-      const form = openPopup.querySelector("form");
-      if (form) form.reset();
-      closePopup(openPopup);
-    }
+    const openedPopup = document.querySelector(".popup_opened");
+    if (openedPopup) closePopup(openedPopup);
   }
 }
 
-export function closeAvatarPopup() {
-  closePopup(avatarPopup);
-}
+avatarForm.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  const url = avatarInput.value;
+  avatarSubmitButton.textContent = "Сохранение...";
+  updateAvatar({ avatar: url })
+    .then((user) => {
+      avatarImage.style.backgroundImage = `url(${user.avatar})`;
+      closePopup(avatarPopup);
+      avatarForm.reset();
+    })
+    .catch(console.error)
+    .finally(() => {
+      avatarSubmitButton.textContent = "Сохранить";
+    });
+});

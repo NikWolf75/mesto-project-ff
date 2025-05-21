@@ -1,5 +1,11 @@
 import "../pages/index.css";
-import { getUserInfo, getInitialCards, updateUserInfo, addNewCard } from "./api.js";
+import {
+  getUserInfo,
+  getInitialCards,
+  updateUserInfo,
+  addNewCard,
+  updateAvatar
+} from "./api.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
 import {
   avatarForm,
@@ -86,6 +92,19 @@ function handleAddCardFormSubmit(evt) {
     .catch(console.error);
 }
 
+function handleAvatarFormSubmit(evt) {
+  evt.preventDefault();
+
+  updateAvatar(avatarInput.value)
+    .then((updatedUser) => {
+      updateProfile(updatedUser);
+      closePopup(avatarPopup);
+      avatarForm.reset();
+      resetValidation(avatarForm);
+    })
+    .catch(console.error);
+}
+
 profileAvatar.addEventListener("click", () => {
   avatarInput.value = "";
   avatarSubmitButton.disabled = true;
@@ -140,6 +159,7 @@ document.querySelectorAll(".popup").forEach((popup) => {
 
 editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
+avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
 enableValidation({
   formSelector: ".popup__form"
