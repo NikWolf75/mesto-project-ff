@@ -73,3 +73,46 @@
   box-sizing: border-box;
   box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
+
+/* Для попапа с картинкой — убрать белый фон и тени */
+.popup_type_image .popup__content,
+.popup_type_image .popup__container {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  max-width: none !important;
+  width: auto !important;
+  border-radius: 0 !important;
+}
+
+/* Стили для картинки внутри попапа с картинкой */
+.popup_type_image .popup__image {
+  max-width: 90vw !important;
+  max-height: 90vh !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
+}
+
+/* Кнопка подтверждения — черная для confirm, но не для картинки */
+.popup_type_confirm .popup__button_type_confirm {
+  width: 100%;
+  padding: 10px;
+  background-color: black;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Запрет применения стилей кнопки в попапе с картинкой */
+.popup_type_image .popup__button_type_confirm {
+  background-color: initial;
+  color: initial;
+  cursor: initial;
+}
+
+/* Отключенный режим кнопки */
+.popup__button_type_confirm:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

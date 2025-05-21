@@ -1,12 +1,13 @@
-import "../pages/index.css"; 
+import "../pages/index.css";
 import {
   getUserInfo,
   getInitialCards,
   updateUserInfo,
   addNewCard,
-  updateAvatar
+  updateAvatar,
+  deleteCardFromServer,
 } from "./api.js";
-import { createCard, deleteCard, toggleLike } from "./card.js";
+import { createCard, toggleLike } from "./card.js";
 import {
   avatarForm,
   avatarInput,
@@ -14,7 +15,9 @@ import {
   avatarImage,
   avatarPopup,
   openPopup,
-  closePopup
+  closePopup,
+  confirmPopup,
+  confirmButton,
 } from "./modal.js";
 import { enableValidation, resetValidation } from "./validation.js";
 import logo from "../images/logo.svg";
@@ -49,6 +52,7 @@ logoElement.src = logo;
 profileAvatar.style.backgroundImage = `url(${avatar})`;
 
 let userId = null;
+let deleteCardCallback = null;
 
 function updateProfile(user) {
   profileName.textContent = user.name;
@@ -61,7 +65,13 @@ Promise.all([getUserInfo(), getInitialCards()])
   .then(([userData, cards]) => {
     updateProfile(userData);
     cards.forEach((card) => {
-      const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup, userId);
+const cardElement = createCard(
+  card,
+  (cardId, cardElement) => handleDeleteCard(cardId, cardElement), // сюда передаем колбэк для открытия подтверждения
+  toggleLike,
+  openImagePopup,
+  userId
+);
       placesList.append(cardElement);
     });
   })
@@ -106,7 +116,13 @@ function handleAddCardFormSubmit(evt) {
 
   addNewCard({ name: titleInput.value, link: linkInput.value })
     .then((card) => {
-      const cardElement = createCard(card, deleteCard, toggleLike, openImagePopup, userId);
+      const cardElement = createCard(
+        card,
+        (cardId, cardElement) => handleDeleteCard(cardId, cardElement),
+        toggleLike,
+        openImagePopup,
+        userId
+      );
       placesList.prepend(cardElement);
       closePopup(popupAddCard);
       addCardForm.reset();
@@ -142,7 +158,6 @@ profileAvatar.addEventListener("click", () => {
   avatarInput.value = "";
   avatarSubmitButton.disabled = true;
   avatarSubmitButton.classList.add("popup__button_disabled");
-  avatarSubmitButton.textContent = "Сохранить";
   resetValidation(avatarForm);
   openPopup(avatarPopup);
 });
@@ -195,6 +210,47 @@ editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
 avatarForm.addEventListener("submit", handleAvatarFormSubmit);
 
+confirmPopup.addEventListener("submit", (evt) => {
+  evt.preventDefault();
+  const button = confirmButton;
+  const originalText = button.textContent;
+  toggleButtonLoadingState(button, true, originalText);
+  if (deleteCardCallback) {
+    deleteCardCallback().finally(() => {
+      toggleButtonLoadingState(button, false, originalText);
+      closePopup(confirmPopup);
+    });
+  }
+});
+
+profileAvatar.addEventListener("click", () => {
+  avatarInput.value = "";
+  resetValidation(avatarForm);
+  resetAvatarFormButton();
+  openPopup(avatarPopup);
+});
+
+function resetAvatarFormButton() {
+  avatarSubmitButton.disabled = true;
+  avatarSubmitButton.classList.add("popup__button_disabled");
+  avatarSubmitButton.textContent = "Сохранить";
+}
+
+function handleDeleteCard(cardId, cardElement) {
+  deleteCardCallback = () =>
+    deleteCardFromServer(cardId)
+      .then(() => {
+        cardElement.remove();
+      })
+      .catch(console.error);
+
+  confirmButton.textContent = "Да";
+  confirmButton.disabled = false;
+  confirmButton.classList.remove("popup__button_disabled");
+
+  openPopup(confirmPopup);
+}
+
 enableValidation({
-  formSelector: ".popup__form"
+  formSelector: ".popup__form",
 });
