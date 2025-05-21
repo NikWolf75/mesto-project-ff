@@ -1,3 +1,5 @@
+// файл: modal.js
+
 import { updateAvatar } from "./api.js";
 
 export const avatarPopup = document.querySelector(".popup_type_avatar");
@@ -27,7 +29,7 @@ avatarForm.addEventListener("submit", (evt) => {
   evt.preventDefault();
   const url = avatarInput.value;
   avatarSubmitButton.textContent = "Сохранение...";
-  updateAvatar({ avatar: url })
+  updateAvatar(url)
     .then((user) => {
       avatarImage.style.backgroundImage = `url(${user.avatar})`;
       closePopup(avatarPopup);
