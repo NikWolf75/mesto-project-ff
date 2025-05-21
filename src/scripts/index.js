@@ -1,4 +1,4 @@
-import "../pages/index.css";
+import "../pages/index.css"; 
 import {
   getUserInfo,
   getInitialCards,
@@ -67,19 +67,42 @@ Promise.all([getUserInfo(), getInitialCards()])
   })
   .catch(console.error);
 
+function toggleButtonLoadingState(button, isLoading, originalText) {
+  if (isLoading) {
+    button.textContent = "Сохранение...";
+    button.disabled = true;
+    button.classList.add("popup__button_disabled");
+  } else {
+    button.textContent = originalText;
+    button.disabled = false;
+    button.classList.remove("popup__button_disabled");
+  }
+}
+
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
+  const button = editProfileForm.querySelector(".popup__button");
+  const originalText = button.textContent;
+
+  toggleButtonLoadingState(button, true, originalText);
 
   updateUserInfo({ name: nameInput.value, about: jobInput.value })
     .then((updatedUser) => {
       updateProfile(updatedUser);
       closePopup(popupEdit);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      toggleButtonLoadingState(button, false, originalText);
+    });
 }
 
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
+  const button = addCardForm.querySelector(".popup__button");
+  const originalText = button.textContent;
+
+  toggleButtonLoadingState(button, true, originalText);
 
   addNewCard({ name: titleInput.value, link: linkInput.value })
     .then((card) => {
@@ -89,11 +112,18 @@ function handleAddCardFormSubmit(evt) {
       addCardForm.reset();
       resetValidation(addCardForm);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      toggleButtonLoadingState(button, false, originalText);
+    });
 }
 
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
+  const button = avatarForm.querySelector(".popup__button");
+  const originalText = button.textContent;
+
+  toggleButtonLoadingState(button, true, originalText);
 
   updateAvatar(avatarInput.value)
     .then((updatedUser) => {
@@ -102,7 +132,10 @@ function handleAvatarFormSubmit(evt) {
       avatarForm.reset();
       resetValidation(avatarForm);
     })
-    .catch(console.error);
+    .catch(console.error)
+    .finally(() => {
+      toggleButtonLoadingState(button, false, originalText);
+    });
 }
 
 profileAvatar.addEventListener("click", () => {
