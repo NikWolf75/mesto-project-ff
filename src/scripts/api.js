@@ -1,4 +1,3 @@
-// api.js
 const cohortId = "wff-cohort-39";
 const token = "ba26a2bd-21bb-4faa-8017-2c8d6bacad83";
 
@@ -13,17 +12,13 @@ function checkResponse(res) {
 
 function getUserInfo() {
   return fetch(`${baseUrl}/users/me`, {
-    headers: {
-      authorization: token,
-    },
+    headers: { authorization: token },
   }).then(checkResponse);
 }
 
 function getInitialCards() {
   return fetch(`${baseUrl}/cards`, {
-    headers: {
-      authorization: token,
-    },
+    headers: { authorization: token },
   }).then(checkResponse);
 }
 
@@ -49,13 +44,45 @@ function addNewCard({ name, link }) {
   }).then(checkResponse);
 }
 
-function apiDeleteCard(cardId) {
-  return fetch(`${baseUrl}/cards/${cardId}`, {
-    method: "DELETE",
-    headers: {
-      authorization: token,
-    },
+function likeCard(cardId) {
+  return fetch(`${baseUrl}/cards/likes/${cardId}`, {
+    method: "PUT",
+    headers: { authorization: token },
   }).then(checkResponse);
 }
 
-export { getUserInfo, getInitialCards, updateUserInfo, addNewCard, apiDeleteCard };
+function unlikeCard(cardId) {
+  return fetch(`${baseUrl}/cards/likes/${cardId}`, {
+    method: "DELETE",
+    headers: { authorization: token },
+  }).then(checkResponse);
+}
+
+function deleteCardFromServer(cardId) {
+  return fetch(`${baseUrl}/cards/${cardId}`, {
+    method: "DELETE",
+    headers: { authorization: token },
+  }).then(checkResponse);
+}
+
+function updateAvatar(avatarUrl) {
+  return fetch(`${baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: {
+      authorization: token,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ avatar: avatarUrl }),
+  }).then(checkResponse);
+}
+
+export {
+  getUserInfo,
+  getInitialCards,
+  updateUserInfo,
+  addNewCard,
+  likeCard,
+  unlikeCard,
+  deleteCardFromServer,
+  updateAvatar
+};

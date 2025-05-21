@@ -1,5 +1,5 @@
 function showInputError(form, input, message) {
-  const errorElement = form.querySelector(`.${input.name}-error`);
+  const errorElement = form.querySelector(`.${input.name}-error, .popup__error_type_${input.name}`);
   if (!errorElement) return;
   input.classList.add("popup__input_type_error");
   errorElement.textContent = message;
@@ -7,7 +7,7 @@ function showInputError(form, input, message) {
 }
 
 function hideInputError(form, input) {
-  const errorElement = form.querySelector(`.${input.name}-error`);
+  const errorElement = form.querySelector(`.${input.name}-error, .popup__error_type_${input.name}`);
   if (!errorElement) return;
   input.classList.remove("popup__input_type_error");
   errorElement.textContent = "";
@@ -98,6 +98,23 @@ function checkInputValidityAddCard(form, input) {
   return true;
 }
 
+function checkInputValidityAvatar(form, input) {
+  if (!input.value) {
+    showInputError(form, input, "Вы пропустили это поле.");
+    return false;
+  }
+
+  try {
+    new URL(input.value);
+  } catch {
+    showInputError(form, input, "Введите адрес сайта.");
+    return false;
+  }
+
+  hideInputError(form, input);
+  return true;
+}
+
 function toggleButtonState(inputs, button, validityCheck) {
   const allValid = inputs.every(
     (input) => input.validity.valid && validityCheck(input.closest("form"), input)
@@ -106,42 +123,31 @@ function toggleButtonState(inputs, button, validityCheck) {
   button.classList.toggle("popup__button_disabled", !allValid);
 }
 
-function setProfileFormValidation(form) {
+function setFormValidation(form, checkValidityFn) {
   const inputs = Array.from(form.querySelectorAll(".popup__input"));
   const button = form.querySelector(".popup__button");
 
   inputs.forEach((input) => {
     input.addEventListener("input", () => {
-      checkInputValidityProfile(form, input);
-      toggleButtonState(inputs, button, checkInputValidityProfile);
+      checkValidityFn(form, input);
+      toggleButtonState(inputs, button, checkValidityFn);
     });
   });
 
-  toggleButtonState(inputs, button, checkInputValidityProfile);
-}
-
-function setAddCardFormValidation(form) {
-  const inputs = Array.from(form.querySelectorAll(".popup__input"));
-  const button = form.querySelector(".popup__button");
-
-  inputs.forEach((input) => {
-    input.addEventListener("input", () => {
-      checkInputValidityAddCard(form, input);
-      toggleButtonState(inputs, button, checkInputValidityAddCard);
-    });
-  });
-
-  toggleButtonState(inputs, button, checkInputValidityAddCard);
+  toggleButtonState(inputs, button, checkValidityFn);
 }
 
 export function enableValidation({ formSelector }) {
   const forms = Array.from(document.querySelectorAll(formSelector));
   forms.forEach((form) => {
     if (form.classList.contains("popup__form_type_edit")) {
-      setProfileFormValidation(form);
+      setFormValidation(form, checkInputValidityProfile);
     }
     if (form.classList.contains("popup__form_type_add")) {
-      setAddCardFormValidation(form);
+      setFormValidation(form, checkInputValidityAddCard);
+    }
+    if (form.name === "avatar") {
+      setFormValidation(form, checkInputValidityAvatar);
     }
   });
 }
@@ -156,3 +162,14 @@ export function resetValidation(form) {
   button.disabled = true;
   button.classList.add("popup__button_disabled");
 }
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
+
+export { validationConfig };

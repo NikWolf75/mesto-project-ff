@@ -1,11 +1,19 @@
-// index.js
 import "../pages/index.css";
 import { getUserInfo, getInitialCards, updateUserInfo, addNewCard } from "./api.js";
 import { createCard, deleteCard, toggleLike } from "./card.js";
-import { openPopup, closePopup } from "./modal.js";
+import {
+  avatarForm,
+  avatarInput,
+  avatarSubmitButton,
+  avatarImage,
+  avatarPopup,
+  openPopup,
+  closePopup
+} from "./modal.js";
 import { enableValidation, resetValidation } from "./validation.js";
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
+import "../blocks/popup/__image/popup__image.css";
 
 const profileName = document.querySelector(".profile__title");
 const profileAbout = document.querySelector(".profile__description");
@@ -78,6 +86,14 @@ function handleAddCardFormSubmit(evt) {
     .catch(console.error);
 }
 
+profileAvatar.addEventListener("click", () => {
+  avatarInput.value = "";
+  avatarSubmitButton.disabled = true;
+  avatarSubmitButton.classList.add("popup__button_disabled");
+  resetValidation(avatarForm);
+  openPopup(avatarPopup);
+});
+
 function openImagePopup(evt) {
   popupImageElem.src = evt.target.src;
   popupImageElem.alt = evt.target.alt;
@@ -126,5 +142,5 @@ editProfileForm.addEventListener("submit", handleProfileFormSubmit);
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
 
 enableValidation({
-  formSelector: ".popup__form",
+  formSelector: ".popup__form"
 });

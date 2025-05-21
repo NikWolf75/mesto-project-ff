@@ -1,29 +1,28 @@
-// card.js
-import { apiDeleteCard } from "./api.js";
+import { likeCard, unlikeCard, deleteCardFromServer } from "./api.js";
 
 export function toggleLike(event) {
   const likeButton = event.target;
-  const likeCountElem = likeButton.nextElementSibling;
+  const card = likeButton.closest(".card");
+  const cardId = card.dataset.id;
+  const likeCountElem = card.querySelector(".card__like-count");
 
-  likeButton.classList.toggle("card__like-button_is-active");
+  const isLiked = likeButton.classList.contains("card__like-button_is-active");
+  const request = isLiked ? unlikeCard(cardId) : likeCard(cardId);
 
-  let count = parseInt(likeCountElem.textContent, 10);
-  if (likeButton.classList.contains("card__like-button_is-active")) {
-    count++;
-  } else {
-    count--;
-  }
-  likeCountElem.textContent = count;
+  request
+    .then((updatedCard) => {
+      likeCountElem.textContent = updatedCard.likes.length;
+      likeButton.classList.toggle("card__like-button_is-active");
+    })
+    .catch(console.error);
 }
 
 export function deleteCard(card, cardId) {
-  apiDeleteCard(cardId)
+  deleteCardFromServer(cardId)
     .then(() => {
       card.remove();
     })
-    .catch((err) => {
-      console.error("Ошибка удаления карточки:", err);
-    });
+    .catch(console.error);
 }
 
 export function createCard(
@@ -45,6 +44,8 @@ export function createCard(
   const likeCountElem = card.querySelector(".card__like-count");
   const deleteButton = card.querySelector(".card__delete-button");
 
+  card.dataset.id = _id;
+
   cardImage.src = link || "";
   cardImage.alt = name;
   cardTitle.textContent = name;
@@ -52,7 +53,7 @@ export function createCard(
 
   likeCountElem.textContent = likes.length;
 
-  if (likes.length > 0) {
+  if (likes.some(user => user._id === currentUserId)) {
     likeButton.classList.add("card__like-button_is-active");
   }
 

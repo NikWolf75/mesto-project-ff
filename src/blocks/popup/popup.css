@@ -23,6 +23,9 @@
   opacity: 0;
   transition: visibility 0s, opacity 0.6s;
   pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .popup_opened {
@@ -58,4 +61,15 @@
   background-color: #e5e5e5;
   color: #bfbfbf;
   cursor: default;
+}
+
+.popup__content,
+.popup__container {
+  background-color: #fff;
+  border-radius: 8px;
+  max-width: 500px;
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
