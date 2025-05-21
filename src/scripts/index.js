@@ -142,6 +142,7 @@ profileAvatar.addEventListener("click", () => {
   avatarInput.value = "";
   avatarSubmitButton.disabled = true;
   avatarSubmitButton.classList.add("popup__button_disabled");
+  avatarSubmitButton.textContent = "Сохранить";
   resetValidation(avatarForm);
   openPopup(avatarPopup);
 });
@@ -160,7 +161,7 @@ function openImagePopup(evt) {
 }
 
 editButton.addEventListener("click", () => {
-  resetValidation(editProfileForm); // очищаем ошибки и кнопки, но НЕ очищаем значения
+  resetValidation(editProfileForm);
   nameInput.value = profileName.textContent.trim();
   jobInput.value = profileAbout.textContent.trim();
   openPopup(popupEdit);
