@@ -55,6 +55,9 @@
               minlength="2"
               maxlength="40"
               pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$"
+              data-error-value-missing="Пожалуйста, введите имя"
+              data-error-too-short="Имя должно содержать не менее 2 символов"
+              data-error-pattern-mismatch="Имя содержит недопустимые символы"
             />
             <span class="popup__input-error name-error"></span>
 
@@ -67,6 +70,9 @@
               minlength="2"
               maxlength="200"
               pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$"
+              data-error-value-missing="Пожалуйста, введите описание"
+              data-error-too-short="Описание должно содержать не менее 2 символов"
+              data-error-pattern-mismatch="Описание содержит недопустимые символы"
             />
             <span class="popup__input-error description-error"></span>
 
@@ -92,6 +98,8 @@
               class="popup__input popup__input_type_avatar"
               placeholder="Ссылка на аватар"
               required
+              data-error-value-missing="Пожалуйста, введите ссылку на аватар"
+              data-error-type-mismatch="Введите корректный URL"
             />
             <span class="popup__input-error avatar-error"></span>
             <button
@@ -146,6 +154,9 @@
               minlength="2"
               maxlength="30"
               pattern="^[a-zA-Zа-яА-ЯёЁ\s-]+$"
+              data-error-value-missing="Пожалуйста, введите название"
+              data-error-too-short="Название должно содержать не менее 2 символов"
+              data-error-pattern-mismatch="Название содержит недопустимые символы"
             />
             <span class="popup__input-error title-error"></span>
 
@@ -155,6 +166,8 @@
               class="popup__input popup__input_type_link"
               placeholder="Ссылка на картинку"
               required
+              data-error-value-missing="Пожалуйста, введите ссылку на картинку"
+              data-error-type-mismatch="Введите корректный URL"
             />
             <span class="popup__input-error link-error"></span>
 
