@@ -1,9 +1,9 @@
 const config = {
-  baseUrl: "https://nomoreparties.co/v1/wff-cohort-39",
+  baseUrl: 'https://nomoreparties.co/v1/wff-cohort-39',
   headers: {
-    authorization: "ba26a2bd-21bb-4faa-8017-2c8d6bacad83",
-    "Content-Type": "application/json",
-  },
+    authorization: 'ba26a2bd-21bb-4faa-8017-2c8d6bacad83',
+    'Content-Type': 'application/json'
+  }
 };
 
 function checkResponse(res) {
