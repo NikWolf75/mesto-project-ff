@@ -49,7 +49,7 @@
   visibility: hidden;
 }
 
-.popup__input-error_visible {
+.popup__input-error_active {
   visibility: visible;
 }
 

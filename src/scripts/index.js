@@ -2,7 +2,7 @@ import "../pages/index.css";
 import { getUserInfo, getInitialCards, updateUserInfo, addNewCard, updateAvatar, deleteCardFromServer } from "./api.js";
 import { createCard, toggleLike } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
-import { enableValidation, resetValidation } from "./validation.js";
+import { enableValidation, resetValidation } from './validation.js';
 import logo from "../images/logo.svg";
 import avatar from "../images/avatar.jpg";
 import "../blocks/popup/__image/popup__image.css";
@@ -45,6 +45,15 @@ profileAvatar.style.backgroundImage = `url(${avatar})`;
 
 let userId = null;
 let deleteCardCallback = null;
+
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inactiveButtonClass: "popup__button_disabled",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__error_visible",
+};
 
 function updateProfile(user) {
   profileName.textContent = user.name;
@@ -118,7 +127,7 @@ function handleAddCardFormSubmit(evt) {
       placesList.prepend(cardElement);
       closePopup(popupAddCard);
       addCardForm.reset();
-      resetValidation(addCardForm);
+      resetValidation(addCardForm, validationConfig);
     })
     .catch(console.error)
     .finally(() => {
@@ -138,7 +147,7 @@ function handleAvatarFormSubmit(evt) {
       updateProfile(updatedUser);
       closePopup(popupAvatar);
       avatarForm.reset();
-      resetValidation(avatarForm);
+      resetValidation(avatarForm, validationConfig);
     })
     .catch(console.error)
     .finally(() => {
@@ -177,14 +186,14 @@ function handleDeleteCard(cardId, cardElement) {
 }
 
 editButton.addEventListener("click", () => {
-  resetValidation(editProfileForm);
+  resetValidation(editProfileForm, validationConfig);
   nameInput.value = profileName.textContent.trim();
   jobInput.value = profileAbout.textContent.trim();
   openPopup(popupEdit);
 });
 
 addButton.addEventListener("click", () => {
-  resetValidation(addCardForm);
+  resetValidation(addCardForm, validationConfig);
   openPopup(popupAddCard);
 });
 
@@ -192,7 +201,7 @@ profileAvatar.addEventListener("click", () => {
   avatarInput.value = "";
   avatarSubmitButton.disabled = true;
   avatarSubmitButton.classList.add("popup__button_disabled");
-  resetValidation(avatarForm);
+  resetValidation(avatarForm, validationConfig);
   openPopup(popupAvatar);
 });
 
@@ -217,7 +226,7 @@ document.querySelectorAll(".popup__close").forEach((button) => {
   const popup = button.closest(".popup");
   button.addEventListener("click", () => {
     const form = popup.querySelector("form");
-    if (form) resetValidation(form);
+    if (form) resetValidation(form, validationConfig);
     closePopup(popup);
   });
 });
@@ -226,12 +235,10 @@ document.querySelectorAll(".popup").forEach((popup) => {
   popup.addEventListener("mousedown", (evt) => {
     if (evt.target === popup) {
       const form = popup.querySelector("form");
-      if (form) resetValidation(form);
+      if (form) resetValidation(form, validationConfig);
       closePopup(popup);
     }
   });
 });
 
-enableValidation({
-  formSelector: ".popup__form",
-});
+enableValidation(validationConfig);

@@ -1,28 +1,22 @@
-function showInputError(form, input, message) {
-  const errorElement = form.querySelector(
-    `.${input.name}-error, .popup__error_type_${input.name}`
-  );
-  if (!errorElement) return;
-  input.classList.add("popup__input_type_error");
-  errorElement.textContent = message;
-  errorElement.classList.add("popup__input-error_visible");
+function showInputError(formElement, inputElement, errorMessage) {
+  const errorElement = formElement.querySelector(`.${inputElement.name}-error`);
+  inputElement.classList.add('popup__input_type_error');
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add('popup__input-error_active');
 }
 
-function hideInputError(form, input) {
-  const errorElement = form.querySelector(
-    `.${input.name}-error, .popup__error_type_${input.name}`
-  );
-  if (!errorElement) return;
-  input.classList.remove("popup__input_type_error");
-  errorElement.textContent = "";
-  errorElement.classList.remove("popup__input-error_visible");
+function hideInputError(formElement, inputElement) {
+  const errorElement = formElement.querySelector(`.${inputElement.name}-error`);
+  inputElement.classList.remove('popup__input_type_error');
+  errorElement.textContent = '';
+  errorElement.classList.remove('popup__input-error_active');
 }
 
-function checkInputValidityProfile(form, input) {
+function checkInputValidityProfile(form, input, validationConfig) {
   const regex = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
 
   if (!input.value) {
-    showInputError(form, input, "Вы пропустили это поле.");
+    showInputError(form, input, "Вы пропустили это поле.", validationConfig);
     return false;
   }
 
@@ -33,12 +27,13 @@ function checkInputValidityProfile(form, input) {
         input,
         `Минимальное количество символов: 2. Длина текста сейчас: ${
           input.value.length
-        } ${input.value.length === 1 ? "символ" : "символов"}.`
+        } ${input.value.length === 1 ? "символ" : "символов"}.`,
+        validationConfig
       );
       return false;
     }
     if (!regex.test(input.value)) {
-      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы");
+      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы", validationConfig);
       return false;
     }
   }
@@ -50,25 +45,26 @@ function checkInputValidityProfile(form, input) {
         input,
         `Минимальное количество символов: 2. Длина текста сейчас: ${
           input.value.length
-        } ${input.value.length === 1 ? "символ" : "символов"}.`
+        } ${input.value.length === 1 ? "символ" : "символов"}.`,
+        validationConfig
       );
       return false;
     }
     if (!regex.test(input.value)) {
-      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы");
+      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы", validationConfig);
       return false;
     }
   }
 
-  hideInputError(form, input);
+  hideInputError(form, input, validationConfig);
   return true;
 }
 
-function checkInputValidityAddCard(form, input) {
+function checkInputValidityAddCard(form, input, validationConfig) {
   const regex = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
 
   if (!input.value) {
-    showInputError(form, input, "Вы пропустили это поле.");
+    showInputError(form, input, "Вы пропустили это поле.", validationConfig);
     return false;
   }
 
@@ -79,12 +75,13 @@ function checkInputValidityAddCard(form, input) {
         input,
         `Максимальное количество символов: 30. Длина текста сейчас: ${
           input.value.length
-        } ${input.value.length === 1 ? "символ" : "символов"}.`
+        } ${input.value.length === 1 ? "символ" : "символов"}.`,
+        validationConfig
       );
       return false;
     }
     if (!regex.test(input.value)) {
-      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы");
+      showInputError(form, input, "Допустимы только буквы, пробелы и дефисы", validationConfig);
       return false;
     }
   }
@@ -93,79 +90,79 @@ function checkInputValidityAddCard(form, input) {
     try {
       new URL(input.value);
     } catch {
-      showInputError(form, input, "Введите адрес сайта.");
+      showInputError(form, input, "Введите адрес сайта.", validationConfig);
       return false;
     }
   }
 
-  hideInputError(form, input);
+  hideInputError(form, input, validationConfig);
   return true;
 }
 
-function checkInputValidityAvatar(form, input) {
+function checkInputValidityAvatar(form, input, validationConfig) {
   if (!input.value) {
-    showInputError(form, input, "Вы пропустили это поле.");
+    showInputError(form, input, "Вы пропустили это поле.", validationConfig);
     return false;
   }
 
   try {
     new URL(input.value);
   } catch {
-    showInputError(form, input, "Введите адрес сайта.");
+    showInputError(form, input, "Введите адрес сайта.", validationConfig);
     return false;
   }
 
-  hideInputError(form, input);
+  hideInputError(form, input, validationConfig);
   return true;
 }
 
-function toggleButtonState(inputs, button, validityCheck) {
+function toggleButtonState(inputs, button, validityCheck, validationConfig) {
   const allValid = inputs.every(
     (input) =>
-      input.validity.valid && validityCheck(input.closest("form"), input)
+      input.validity.valid && validityCheck(input.closest("form"), input, validationConfig)
   );
   button.disabled = !allValid;
-  button.classList.toggle("popup__button_disabled", !allValid);
+  button.classList.toggle(validationConfig.inactiveButtonClass, !allValid);
 }
 
-function setFormValidation(form, checkValidityFn) {
-  const inputs = Array.from(form.querySelectorAll(".popup__input"));
-  const button = form.querySelector(".popup__button");
+function setFormValidation(form, checkValidityFn, validationConfig) {
+  const inputs = Array.from(form.querySelectorAll(validationConfig.inputSelector));
+  const button = form.querySelector(validationConfig.submitButtonSelector);
 
   inputs.forEach((input) => {
     input.addEventListener("input", () => {
-      checkValidityFn(form, input);
-      toggleButtonState(inputs, button, checkValidityFn);
+      checkValidityFn(form, input, validationConfig);
+      toggleButtonState(inputs, button, checkValidityFn, validationConfig);
     });
   });
 
-  toggleButtonState(inputs, button, checkValidityFn);
+  toggleButtonState(inputs, button, checkValidityFn, validationConfig);
 }
 
-export function enableValidation({ formSelector }) {
-  const forms = Array.from(document.querySelectorAll(formSelector));
+export function enableValidation(validationConfig) {
+  const forms = Array.from(document.querySelectorAll(validationConfig.formSelector));
   forms.forEach((form) => {
     if (form.classList.contains("popup__form_type_edit")) {
-      setFormValidation(form, checkInputValidityProfile);
+      setFormValidation(form, checkInputValidityProfile, validationConfig);
     }
     if (form.classList.contains("popup__form_type_add")) {
-      setFormValidation(form, checkInputValidityAddCard);
+      setFormValidation(form, checkInputValidityAddCard, validationConfig);
     }
     if (form.name === "avatar") {
-      setFormValidation(form, checkInputValidityAvatar);
+      setFormValidation(form, checkInputValidityAvatar, validationConfig);
     }
   });
 }
 
-export function resetValidation(form) {
-  const inputs = Array.from(form.querySelectorAll(".popup__input"));
+export function resetValidation(form, validationConfig) {
+  const inputs = Array.from(form.querySelectorAll(validationConfig.inputSelector));
   inputs.forEach((input) => {
-    hideInputError(form, input);
+    hideInputError(form, input, validationConfig);
     input.value = "";
   });
-  const button = form.querySelector(".popup__button");
+  const button = form.querySelector(validationConfig.submitButtonSelector);
   button.disabled = true;
-  button.classList.add("popup__button_disabled");
+  button.classList.add(validationConfig.inactiveButtonClass);
 }
 
 const validationConfig = {
@@ -174,7 +171,7 @@ const validationConfig = {
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__error_visible",
+  errorClass: "popup__input-error_visible",
 };
 
 export { validationConfig };
