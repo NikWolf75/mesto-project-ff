@@ -46,13 +46,13 @@ profileAvatar.style.backgroundImage = `url(${avatar})`;
 let userId = null;
 let deleteCardCallback = null;
 
-const validationConfig = {
+export const validationConfig = {
   formSelector: ".popup__form",
   inputSelector: ".popup__input",
   submitButtonSelector: ".popup__button",
   inactiveButtonClass: "popup__button_disabled",
   inputErrorClass: "popup__input_type_error",
-  errorClass: "popup__input-error_active",
+  errorClass: "popup__error_visible"
 };
 
 function updateProfile(user) {
