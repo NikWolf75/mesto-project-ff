@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "homepage": "https://nikwolf75.github.io/mesto-project-ff",
-  "scripts": {
-  "start": "cross-env NODE_ENV=development webpack serve",
+"scripts": {
+  "start": "cross-env NODE_ENV=development webpack serve --hot --open",
   "build": "cross-env NODE_ENV=production webpack",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
-  },
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+},
   "keywords": [],
   "author": "Nikita Kyulyuev",
   "license": "ISC",

@@ -1,4 +1,7 @@
+// card.js
 import { likeCard, unlikeCard } from './api.js';
+
+const cardsContainer = document.querySelector('.elements');
 
 function toggleLike(event) {
   const likeButton = event.target;
@@ -63,4 +66,17 @@ function createCard(
   return card;
 }
 
-export { createCard, toggleLike };
+function renderInitialCards(cards, currentUserId, handleDelete, handleLike, openImagePopup) {
+  cards.forEach((cardData) => {
+    const cardElement = createCard(
+      cardData,
+      handleDelete,
+      handleLike,
+      openImagePopup,
+      currentUserId
+    );
+    cardsContainer.append(cardElement);
+  });
+}
+
+export { createCard, toggleLike, renderInitialCards };
