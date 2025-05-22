@@ -41,8 +41,9 @@
 }
 
 .popup__input-error {
-  font-size: 12px;
   color: red;
+  font-size: 12px;
+  line-height: 14px;
   min-height: 14px;
   margin-top: 5px;
   display: block;
@@ -164,4 +165,25 @@
   margin-right: auto;
   text-align: left;
   max-width: 100%;
+}
+
+.popup__input_type_error {
+  border: 2px solid #ff4d4f;
+}
+
+.popup__input-error {
+  color: #ff4d4f;
+  font-size: 12px;
+  height: 14px;
+  margin-top: 2px;
+  display: block;
+  min-height: 14px;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s linear;
+}
+
+.popup__error_visible {
+  visibility: visible;
+  opacity: 1;
 }
