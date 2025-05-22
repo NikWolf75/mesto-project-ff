@@ -1,5 +1,7 @@
 function showInputError(form, input, errorMessage, config) {
   const errorElement = form.querySelector(`.${input.name}-error`);
+  if (!errorElement) return;
+
   input.classList.add(config.inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(config.errorClass);
@@ -7,25 +9,29 @@ function showInputError(form, input, errorMessage, config) {
 
 function hideInputError(form, input, config) {
   const errorElement = form.querySelector(`.${input.name}-error`);
+  if (!errorElement) return;
+
   input.classList.remove(config.inputErrorClass);
   errorElement.textContent = "";
   errorElement.classList.remove(config.errorClass);
 }
 
 function checkInputValidity(form, input, config) {
+  let errorMessage = "";
+
+  if (input.validity.valueMissing && input.dataset.errorValueMissing) {
+    errorMessage = input.dataset.errorValueMissing;
+  } else if (input.validity.tooShort && input.dataset.errorTooShort) {
+    errorMessage = input.dataset.errorTooShort.replace("{length}", input.value.length);
+  } else if (input.validity.patternMismatch && input.dataset.errorPatternMismatch) {
+    errorMessage = input.dataset.errorPatternMismatch;
+  } else if (input.validity.typeMismatch && input.dataset.errorTypeMismatch) {
+    errorMessage = input.dataset.errorTypeMismatch;
+  } else {
+    errorMessage = input.validationMessage;
+  }
+
   if (!input.validity.valid) {
-    let errorMessage = input.validationMessage;
-
-    if (input.validity.valueMissing && input.dataset.errorValueMissing) {
-      errorMessage = input.dataset.errorValueMissing;
-    } else if (input.validity.tooShort && input.dataset.errorTooShort) {
-      errorMessage = input.dataset.errorTooShort.replace("{length}", input.value.length);
-    } else if (input.validity.patternMismatch && input.dataset.errorPatternMismatch) {
-      errorMessage = input.dataset.errorPatternMismatch;
-    } else if (input.validity.typeMismatch && input.dataset.errorTypeMismatch) {
-      errorMessage = input.dataset.errorTypeMismatch;
-    }
-
     showInputError(form, input, errorMessage, config);
     return false;
   }
@@ -65,9 +71,7 @@ export function resetValidation(form, config) {
 
   inputs.forEach((input) => {
     hideInputError(form, input, config);
-    input.value = "";
   });
 
-  button.disabled = true;
-  button.classList.add(config.inactiveButtonClass);
+  toggleButtonState(inputs, button, config);
 }
