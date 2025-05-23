@@ -1,14 +1,8 @@
 // card.js
 import { likeCard, unlikeCard } from './api.js';
 
-const cardsContainer = document.querySelector('.elements');
-
-function toggleLike(event) {
-  const likeButton = event.target;
-  const card = likeButton.closest('.card');
+function toggleLike(event, likeButton, card, likeCountElem) {
   const cardId = card.dataset.id;
-  const likeCountElem = card.querySelector('.card__like-count');
-
   const isLiked = likeButton.classList.contains('card__like-button_is-active');
   const request = isLiked ? unlikeCard(cardId) : likeCard(cardId);
 
@@ -23,7 +17,6 @@ function toggleLike(event) {
 function createCard(
   { name, link, description, likes = [], _id, owner },
   handleDelete,
-  handleLike,
   openImagePopup,
   currentUserId
 ) {
@@ -60,23 +53,12 @@ function createCard(
     deleteButton.style.display = 'none';
   }
 
-  likeButton.addEventListener('click', handleLike);
+  likeButton.addEventListener('click', (event) =>
+    toggleLike(event, likeButton, card, likeCountElem)
+  );
   cardImage.addEventListener('click', openImagePopup);
 
   return card;
 }
 
-function renderInitialCards(cards, currentUserId, handleDelete, handleLike, openImagePopup) {
-  cards.forEach((cardData) => {
-    const cardElement = createCard(
-      cardData,
-      handleDelete,
-      handleLike,
-      openImagePopup,
-      currentUserId
-    );
-    cardsContainer.append(cardElement);
-  });
-}
-
-export { createCard, toggleLike, renderInitialCards };
+export { createCard };

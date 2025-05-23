@@ -1,6 +1,6 @@
 import "../pages/index.css";
 import { getUserInfo, getInitialCards, updateUserInfo, addNewCard, updateAvatar, deleteCardFromServer } from "./api.js";
-import { createCard, toggleLike } from "./card.js";
+import { createCard } from "./card.js";
 import { openPopup, closePopup } from "./modal.js";
 import { enableValidation, resetValidation } from './validation.js';
 import logo from "../images/logo.svg";
@@ -69,7 +69,6 @@ Promise.all([getUserInfo(), getInitialCards()])
       const cardElement = createCard(
         card,
         (cardId, cardEl) => handleDeleteCard(cardId, cardEl),
-        toggleLike,
         openImagePopup,
         userId
       );
@@ -120,7 +119,6 @@ function handleAddCardFormSubmit(evt) {
       const cardElement = createCard(
         card,
         (cardId, cardEl) => handleDeleteCard(cardId, cardEl),
-        toggleLike,
         openImagePopup,
         userId
       );
@@ -198,11 +196,9 @@ addButton.addEventListener("click", () => {
 });
 
 profileAvatar.addEventListener("click", () => {
-  avatarInput.value = "";
-  avatarSubmitButton.disabled = true;
-  avatarSubmitButton.classList.add("popup__button_disabled");
-  resetValidation(avatarForm, validationConfig);
-  openPopup(popupAvatar);
+avatarInput.value = "";
+resetValidation(avatarForm, validationConfig);
+openPopup(popupAvatar);
 });
 
 avatarForm.addEventListener("submit", handleAvatarFormSubmit);
