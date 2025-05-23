@@ -187,6 +187,9 @@ editButton.addEventListener("click", () => {
   resetValidation(editProfileForm, validationConfig);
   nameInput.value = profileName.textContent.trim();
   jobInput.value = profileAbout.textContent.trim();
+  const button = editProfileForm.querySelector(validationConfig.submitButtonSelector);
+  button.disabled = true;
+  button.classList.add(validationConfig.inactiveButtonClass);
   openPopup(popupEdit);
 });
 
